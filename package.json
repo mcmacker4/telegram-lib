@@ -9,6 +9,9 @@
     "type": "git",
     "url": "git://github.com/mcmacker4/telegram.js.git"
   },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
   "scripts": {
     "build": "tsc"
   },
