@@ -1,5 +1,32 @@
-import { Client } from '../client/client'
 import * as _request from 'request'
+import {
+    IInputFile,
+    IUpdate,
+    IUser,
+    IResponseParameters,
+    IWebhookInfo,
+    IInlineKeyboardMarkup,
+    IReplyKeyboardMarkup,
+    IReplyKeyboardRemove,
+    IForceReply,
+    IMessage,
+    IInputMediaVideo,
+    IInputMediaPhoto,
+    IUserProfilePhotos,
+    IFile,
+    IChatPermissions,
+    IChat,
+    IChatMember,
+    IInputMedia,
+    IPoll,
+    IStickerSet,
+    IMaskPosition,
+    IInlineQueryResult,
+    IShippingOption,
+    ILabeledPrice,
+    IPassportElementError,
+    IGameHighScore
+} from './interfaces'
 
 interface ApiResponse {
     ok: boolean

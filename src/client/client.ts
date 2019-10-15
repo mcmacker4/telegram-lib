@@ -1,7 +1,6 @@
 import { TelegramAPI } from "../api/api";
 import { EventEmitter } from "events";
 
-
 export interface ClientConfig {
     token: string
     webhook?: {
