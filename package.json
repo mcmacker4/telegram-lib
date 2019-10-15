@@ -1,8 +1,8 @@
 {
   "name": "telegram-lib",
-  "version": "0.0.1b",
-  "main": "dist/main.js",
-  "types": "dist/types/main.d.ts",
+  "version": "0.0.2",
+  "main": "lib/main.js",
+  "types": "types/main.d.ts",
   "author": "mcmacker4",
   "license": "GPL-3.0",
   "repository": {

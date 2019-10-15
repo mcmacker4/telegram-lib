@@ -9,6 +9,3 @@ tsconfig.json
 
 # lock file
 yarn.lock
-
-# empty compiled source files
-dist/lib/api/types
