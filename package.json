@@ -1,5 +1,5 @@
 {
-  "name": "@mcmacker4/telegram.js",
+  "name": "telegram-lib",
   "version": "0.0.1b",
   "main": "dist/main.js",
   "types": "dist/types/main.d.ts",
@@ -7,7 +7,7 @@
   "license": "GPL-3.0",
   "repository": {
     "type": "git",
-    "url": "git://github.com/mcmacker4/telegram.js.git"
+    "url": "git://github.com/mcmacker4/telegram-lib.git"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
