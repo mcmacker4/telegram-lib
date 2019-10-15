@@ -2,12 +2,11 @@
   "name": "telegram.js",
   "version": "0.1.0",
   "main": "dist/main.js",
+  "types": "dist/types/main.d.ts",
   "author": "mcmacker4",
   "license": "GPL-3.0",
-  "private": true,
   "scripts": {
-    "build": "tsc",
-    "start": "ts-node --files src/main.ts"
+    "build": "tsc"
   },
   "devDependencies": {
     "@types/node": "^12.7.12",
