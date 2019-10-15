@@ -10,3 +10,6 @@ client.api.getMe().then(me => {
 }).catch(err => {
     console.error(err)
 })
+
+
+export * from './client/client'
