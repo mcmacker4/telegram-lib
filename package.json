@@ -1,10 +1,14 @@
 {
-  "name": "telegram.js",
-  "version": "0.1.0",
+  "name": "@mcmacker4/telegram.js",
+  "version": "0.0.1",
   "main": "dist/main.js",
   "types": "dist/types/main.d.ts",
   "author": "mcmacker4",
   "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mcmacker4/telegram.js.git"
+  },
   "scripts": {
     "build": "tsc"
   },
