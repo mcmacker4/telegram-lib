@@ -74,8 +74,8 @@ export class Webhook {
         if (req.method.toUpperCase() === 'POST' &&
                 req.headers['content-type'] === 'application/json' &&
                 req.url === '/' + this.client.config.token) {
-            const data = ''
-            req.on('data', chunk => data.concat(chunk.toString()))
+            let data = ''
+            req.on('data', chunk => data = data + chunk.toString())
             req.on('end', () => {
                 this.processUpdate(data)
                 res.end()
@@ -101,6 +101,7 @@ export class Webhook {
     }
 
     private async processUpdate(data: string) {
+        this.client.emit('debug', "Incoming update: " + data.replace('\n', ''))
         const update = JSON.parse(data) as IUpdate
         if (update.message) {
             this.client.emit('message', update.message)
