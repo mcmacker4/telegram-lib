@@ -25,7 +25,15 @@ export class Client extends EventEmitter {
 
     constructor(config: ClientConfig) {
         super()
-        this.api = new TelegramAPI(config.token)
+        this.api = new TelegramAPI(this, config.token)
+        if (config.webhook) {
+            this.webhook = new Webhook(this, config.webhook, () => {
+                this.emit('ready')
+            })
+        } else {
+            this.emit('debug', "No webhook configured.")
+            this.emit('ready')
+        }
     }
 
 }
@@ -42,4 +50,6 @@ export declare interface Client {
     on(event: 'shipping_query', listener: (query: IShippingQuery) => void): this
     on(event: 'pre_checkout_query', listener: (query: IPreCheckoutQuery) => void): this
     on(event: 'poll', listener: (poll: IPoll) => void): this
+
+    on(event: 'debug', listener: (msg: string) => void): this
 }

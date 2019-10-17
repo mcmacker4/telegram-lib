@@ -39,7 +39,7 @@ export class Webhook {
     private url: string
     private config: WebhookConf
 
-    constructor(client: Client, config: WebhookConf) {
+    constructor(client: Client, config: WebhookConf, callback: () => void) {
         this.client = client
         this.config = config
         this.url = url.format({
@@ -48,9 +48,14 @@ export class Webhook {
             port: config.port || 443,
             pathname: client.config.token
         })
+        client.emit('debug', "Webhook url: " + this.url)
         if (config.use_http) {
+            client.emit('debug', "Creating server. Using HTTP.")
             this.server = http.createServer(this.requestListener)
         } else {
+            client.emit('debug', "Creating server. Using HTTPS.")
+            client.emit('debug', "Cert file: " + (config.ssl_cert || "None"))
+            client.emit('debug', "Key file: " + (config.ssl_cert || "None"))
             const opts = config.ssl_custom ? {
                 cert: fs.readFileSync(config.ssl_cert),
                 key: fs.readFileSync(config.ssl_key)
@@ -58,8 +63,9 @@ export class Webhook {
             this.server = https.createServer(opts, this.requestListener)
         }
         this.server.listen(client.config.webhook.port, async () => {
+            client.emit('debug', "Webhook now listening.")
             await this.updateWebhook()
-            this.client.emit('ready')
+            callback()
         })
     }
 
@@ -81,7 +87,10 @@ export class Webhook {
 
     private async updateWebhook() {
         const whinfo = await this.client.api.getWebhookInfo()
+        this.client.emit('debug', "Registered webhook is: " + whinfo.url)
         if (whinfo.url !== this.url) {
+            this.client.emit('debug', "Webhook URL differs from the local one. Updating.")
+            // FIXME: This should also update if allowed_updates has changed.
             await this.client.api.setWebhook({
                 url: this.url,
                 allowed_updates: this.config.allowed_updates || []

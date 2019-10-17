@@ -27,6 +27,8 @@ import {
     IPassportElementError,
     IGameHighScore
 } from './interfaces'
+import { Client } from '../client/client'
+import * as qs from 'querystring'
 
 interface ApiResponse {
     ok: boolean
@@ -47,14 +49,17 @@ function Endpoint() {
 
 export class TelegramAPI {
 
+    readonly client: Client
     readonly base: string
 
-    constructor(token: string) {
+    constructor(client: Client, token: string) {
+        this.client = client
         this.base = `https://api.telegram.org/bot${token}/`
     }
 
     request(endpoint: string, data?: object): Promise<any> {
         return new Promise((resolve, reject) => {
+            this.client.emit('debug', `API Request: ${endpoint}${qs.stringify(data as qs.ParsedUrlQueryInput)}`)
             _request(this.base + endpoint, { qs: data, json: true }, (err, res, body) => {
                 if (err) {
                     reject(err)
