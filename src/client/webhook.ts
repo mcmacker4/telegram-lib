@@ -1,22 +1,40 @@
 import * as url from 'url'
 import * as fs from 'fs'
 import { Client } from './client';
-import { createServer, Server } from 'https'
+import * as https from 'https'
+import * as http from 'http'
 import { IncomingMessage, ServerResponse } from 'http';
 import { IUpdate } from '../api/interfaces';
 
 export interface WebhookConf {
+    /**
+     * hostname, port and the token are used to generate the webhook URL
+     */
     hostname: string
     port?: number
-    ssl_cert: string
-    ssl_key: string
+    /**
+     * If true, custom ssl cert and key will be used to create the server
+     */
+    ssl_custom: boolean
+    /**
+     * Path to ssl cert and key
+     */
+    ssl_cert?: string
+    ssl_key?: string
+    /**
+     * If true, HTTP will be used instead of HTTPS
+     */
+    use_http?: boolean
+    /**
+     * The allowed updates for this webhook
+     */
     allowed_updates?: string[]
 }
 
 export class Webhook {
 
     readonly client: Client
-    readonly server: Server
+    readonly server: http.Server | https.Server
 
     private url: string
     private config: WebhookConf
@@ -30,10 +48,15 @@ export class Webhook {
             port: config.port || 443,
             pathname: client.config.token
         })
-        this.server = createServer({
-            cert: fs.readFileSync(config.ssl_cert),
-            key: fs.readFileSync(config.ssl_key)
-        }, this.requestListener)
+        if (config.use_http) {
+            this.server = http.createServer(this.requestListener)
+        } else {
+            const opts = config.ssl_custom ? {
+                cert: fs.readFileSync(config.ssl_cert),
+                key: fs.readFileSync(config.ssl_key)
+            } : {}
+            this.server = https.createServer(opts, this.requestListener)
+        }
         this.server.listen(client.config.webhook.port, async () => {
             await this.updateWebhook()
             this.client.emit('ready')
@@ -61,7 +84,7 @@ export class Webhook {
         if (whinfo.url !== this.url) {
             await this.client.api.setWebhook({
                 url: this.url,
-                allowed_updates: this.config.allowed_updates
+                allowed_updates: this.config.allowed_updates || []
             })
         }
     }
