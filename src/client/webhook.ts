@@ -51,7 +51,7 @@ export class Webhook {
         client.emit('debug', "Webhook url: " + this.url)
         if (config.use_http) {
             client.emit('debug', "Creating server. Using HTTP.")
-            this.server = http.createServer(this.requestListener)
+            this.server = http.createServer(this.requestListener.bind(this))
         } else {
             client.emit('debug', "Creating server. Using HTTPS.")
             client.emit('debug', "Cert file: " + (config.ssl_cert || "None"))
@@ -60,7 +60,7 @@ export class Webhook {
                 cert: fs.readFileSync(config.ssl_cert),
                 key: fs.readFileSync(config.ssl_key)
             } : {}
-            this.server = https.createServer(opts, this.requestListener)
+            this.server = https.createServer(opts, this.requestListener.bind(this))
         }
         this.server.listen(client.config.webhook.port, async () => {
             client.emit('debug', "Webhook now listening.")
@@ -80,6 +80,7 @@ export class Webhook {
                 res.end()
             })
         } else {
+            this.client.emit('debug', "Webhook request ignored: " + req.url)
             res.statusCode = 403
             res.end()
         }

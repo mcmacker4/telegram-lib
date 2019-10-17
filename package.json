@@ -1,6 +1,6 @@
 {
   "name": "telegram-lib",
-  "version": "0.0.3-alpha6",
+  "version": "0.0.3-alpha7",
   "main": "lib/main.js",
   "types": "types/main.d.ts",
   "author": "mcmacker4",

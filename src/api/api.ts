@@ -59,7 +59,7 @@ export class TelegramAPI {
 
     request(endpoint: string, data?: object): Promise<any> {
         return new Promise((resolve, reject) => {
-            this.client.emit('debug', `API Request: ${endpoint}${qs.stringify(data as qs.ParsedUrlQueryInput)}`)
+            this.client.emit('debug', `API Request: /${endpoint}?${qs.stringify(data as qs.ParsedUrlQueryInput)}`)
             _request(this.base + endpoint, { qs: data, json: true }, (err, res, body) => {
                 if (err) {
                     reject(err)
