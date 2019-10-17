@@ -25,6 +25,7 @@ export class Client extends EventEmitter {
 
     constructor(config: ClientConfig) {
         super()
+        this.config = config
         this.api = new TelegramAPI(this, config.token)
         if (config.webhook) {
             this.webhook = new Webhook(this, config.webhook, () => {
