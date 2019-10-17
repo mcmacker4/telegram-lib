@@ -37,6 +37,7 @@ export class Webhook {
     readonly server: http.Server | https.Server
 
     private url: string
+    private path: string
     private config: WebhookConf
 
     constructor(client: Client, config: WebhookConf, callback: () => void) {
@@ -72,7 +73,7 @@ export class Webhook {
     private async requestListener(req: IncomingMessage, res: ServerResponse) {
         if (req.method.toUpperCase() === 'POST' &&
                 req.headers['content-type'] === 'application/json' &&
-                req.url === this.url) {
+                req.url === '/' + this.client.config.token) {
             const data = ''
             req.on('data', chunk => data.concat(chunk.toString()))
             req.on('end', () => {
